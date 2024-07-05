@@ -7,38 +7,36 @@ import (
 	"os"
 	"time"
 
-	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
-
 	"github.com/Yashh56/HotelHub/config"
 	"github.com/Yashh56/HotelHub/routes"
+	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Could not load the environment variables: ", err)
+		log.Fatal("Could not load the environment variables !!", err)
 	}
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		log.Fatal("PORT environment variable is not set")
+		port = "8080"
 	}
 
 	client, err := config.ConnectDB()
 	if err != nil {
-		log.Fatalf("Could not connect to the database: %v", err)
+		log.Fatal("Could not connect to the database !!", err)
 	}
-	defer client.Disconnect()
 
-	router := mux.NewRouter()
+	r := mux.NewRouter()
 
-	// Register user routes
-	routes.UserRoutes(router, client)
+	routes.UserRoutes(r, client)
+	routes.HotelRoutes(r, client)
 
 	server := &http.Server{
 		Addr:           ":" + port,
-		Handler:        router,
+		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
@@ -46,6 +44,6 @@ func main() {
 
 	fmt.Printf("Starting server on port %s...\n", port)
 	if err := server.ListenAndServe(); err != nil {
-		log.Fatalf("Server failed to start: %v", err)
+		log.Fatal(err)
 	}
 }

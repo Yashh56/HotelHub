@@ -5,23 +5,17 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Yashh56/HotelHub/models"
 	"github.com/Yashh56/HotelHub/prisma/db"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
 )
 
-var jwtKey = []byte("your_secret_key")
-
 type Credentials struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
-}
-
-type Claims struct {
-	Username string `json:"username"`
-	jwt.StandardClaims
 }
 
 func Register(client *db.PrismaClient) http.HandlerFunc {
@@ -85,7 +79,7 @@ func Login(client *db.PrismaClient) http.HandlerFunc {
 		}
 
 		expirationTime := time.Now().Add(24 * time.Hour)
-		claims := &Claims{
+		claims := &models.Claims{
 			Username: user.Username,
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: expirationTime.Unix(),
@@ -93,7 +87,7 @@ func Login(client *db.PrismaClient) http.HandlerFunc {
 		}
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		tokenString, err := token.SignedString(jwtKey)
+		tokenString, err := token.SignedString(models.JWTKey)
 		if err != nil {
 			http.Error(w, "Error logging in", http.StatusInternalServerError)
 			log.Error().Err(err).Msg("Failed to sign token")
@@ -106,5 +100,7 @@ func Login(client *db.PrismaClient) http.HandlerFunc {
 			Expires: expirationTime,
 		})
 		log.Info().Msg("User logged in successfully")
+		json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
+
 	}
 }

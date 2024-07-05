@@ -7,6 +7,6 @@ import (
 )
 
 func UserRoutes(router *mux.Router, client *db.PrismaClient) {
-	router.HandleFunc("/api/auth/register", controllers.Register(client)).Methods("POST")
-	router.HandleFunc("/api/auth/login", controllers.Login(client)).Methods("POST")
+	router.HandleFunc("/register", controllers.Register(client)).Methods("POST")
+	router.HandleFunc("/login", controllers.Login(client)).Methods("POST")
 }
