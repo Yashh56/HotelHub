@@ -10,19 +10,10 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// type HotelDetails struct {
-// 	Name           string  `json:"name"`
-// 	Location       string  `json:"location"`
-// 	Description    string  `json:"description"`
-// 	Rating         float64 `json:"rating"`
-// 	TotalRooms     int     `json:"totalRooms"`
-// 	AvailableRooms int     `json:"availableRooms"`
-// }
-
 func CreateHotel(client *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		var details models.HotelDetails
+		var details models.HotelModel
 		err := json.NewDecoder(r.Body).Decode(&details)
 		if err != nil {
 			http.Error(w, "Invalid Input", http.StatusBadRequest)
@@ -89,7 +80,7 @@ func UpdateHotel(client *db.PrismaClient) http.HandlerFunc {
 		params := mux.Vars(r)
 		id := params["id"]
 
-		var input models.HotelDetails
+		var input models.HotelModel
 
 		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
 			http.Error(w, "error in updating", http.StatusBadRequest)
