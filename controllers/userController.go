@@ -80,7 +80,7 @@ func Login(client *db.PrismaClient) http.HandlerFunc {
 
 		expirationTime := time.Now().Add(24 * time.Hour)
 		claims := &models.Claims{
-			Username: user.Username,
+			UserId: user.ID,
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: expirationTime.Unix(),
 			},
@@ -99,8 +99,14 @@ func Login(client *db.PrismaClient) http.HandlerFunc {
 			Value:   tokenString,
 			Expires: expirationTime,
 		})
-		log.Info().Msg("User logged in successfully")
-		json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
 
+		response := map[string]interface{}{
+			"userId": user.ID,
+			"token":  tokenString,
+		}
+
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(response)
+		log.Info().Msg("User logged in successfully")
 	}
 }

@@ -6,9 +6,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var JWTKey = []byte(os.Getenv("SECRET_KEY"))
+var JWTKey = []byte(os.Getenv("JWT_SECRET"))
 
 type Claims struct {
-	Username string `json:"username"`
+	UserId string `json:"userId"`
 	jwt.StandardClaims
 }
