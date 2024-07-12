@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/Yashh56/HotelHub/models"
 	"github.com/Yashh56/HotelHub/prisma/db"
@@ -14,20 +15,26 @@ func CreateHotel(client *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var details models.HotelModel
+
+		userID := r.Context().Value("userId").(string)
 		err := json.NewDecoder(r.Body).Decode(&details)
 		if err != nil {
 			http.Error(w, "Invalid Input", http.StatusBadRequest)
 			log.Error().Err(err).Msg("Failed to decode request body")
 			return
 		}
-
+		createdBy := userID
 		hotel, err := client.Hotel.CreateOne(
 			db.Hotel.Name.Set(details.Name),
 			db.Hotel.Location.Set(details.Location),
 			db.Hotel.Description.Set(details.Description),
 			db.Hotel.Rating.Set(details.Rating),
 			db.Hotel.TotalRooms.Set(details.TotalRooms),
+			db.Hotel.CreatedBy.Set(createdBy),
+			db.Hotel.User.Link(db.User.ID.Equals(userID)),
 			db.Hotel.AvailableRooms.Set(details.AvailableRooms),
+			db.Hotel.CreatedAt.Set(time.Now()),
+			db.Hotel.UpdatedAt.Set(time.Now()),
 		).Exec(r.Context())
 
 		if err != nil {
@@ -100,6 +107,7 @@ func UpdateHotel(client *db.PrismaClient) http.HandlerFunc {
 			db.Hotel.Rating.Set(input.Rating),
 			db.Hotel.TotalRooms.Set(input.TotalRooms),
 			db.Hotel.AvailableRooms.Set(input.AvailableRooms),
+			db.Hotel.UpdatedAt.Set(time.Now()),
 		).Exec(r.Context())
 
 		if err != nil {

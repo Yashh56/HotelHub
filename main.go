@@ -33,6 +33,11 @@ func main() {
 
 	routes.UserRoutes(r, client)
 	routes.HotelRoutes(r, client)
+	routes.RoomRoutes(r, client)
+	routes.CustomerRoutes(r, client)
+	routes.BookingRoutes(r, client)
+	routes.PaymentRoutes(r, client)
+	routes.ReviewRoutes(r, client)
 
 	server := &http.Server{
 		Addr:           ":" + port,

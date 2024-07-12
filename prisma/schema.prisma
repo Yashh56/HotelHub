@@ -16,22 +16,29 @@ model User {
     updatedAt DateTime  @default(now()) @map("updated_at")
     Booking   Booking[]
     Review    Review[]
+    Hotel     Hotel[]
+    Room      Room[]
 }
 
 model Hotel {
     id             String   @id @default(uuid())
     name           String
+    userId         String
     location       String
     description    String
     rating         Float
     totalRooms     Int
     availableRooms Int      @default(0)
+    createdBy      String
     createdAt      DateTime @default(now())
     updatedAt      DateTime @updatedAt
 
-    rooms   Room[]
-    Review  Review[]
-    Amenity Amenity[]
+    user User @relation(fields: [userId], references: [id])
+
+    rooms    Room[]
+    Review   Review[]
+    Booking  Booking[]
+    Customer Customer[]
 }
 
 model Room {
@@ -41,10 +48,12 @@ model Room {
     price        Float
     availability Boolean  @default(true)
     description  String
+    userId       String
     hotelId      String
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
 
+    user    User      @relation(fields: [userId], references: [id])
     Hotel   Hotel     @relation(fields: [hotelId], references: [id])
     Booking Booking[]
 }
@@ -56,11 +65,15 @@ model Booking {
     paymentStatus String
     userId        String
     roomId        String
+    hotelId       String
+    customerId    String
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
     user     User      @relation(fields: [userId], references: [id])
     room     Room      @relation(fields: [roomId], references: [id])
+    customer Customer  @relation(fields: [customerId], references: [id])
+    hotel    Hotel     @relation(fields: [hotelId], references: [id])
     payments Payment[]
 }
 
@@ -70,8 +83,12 @@ model Customer {
     email     String   @unique
     phone     String
     address   String
+    hotelId   String
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now())
+
+    hotel   Hotel     @relation(fields: [hotelId], references: [id])
+    Booking Booking[]
 }
 
 model Payment {
@@ -97,16 +114,5 @@ model Review {
     updatedAt DateTime @updatedAt
 
     user  User  @relation(fields: [userId], references: [id])
-    hotel Hotel @relation(fields: [hotelId], references: [id])
-}
-
-model Amenity {
-    id          String   @id @default(uuid())
-    name        String
-    description String
-    hotelId     String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-
     hotel Hotel @relation(fields: [hotelId], references: [id])
 }
