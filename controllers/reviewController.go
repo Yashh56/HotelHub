@@ -36,6 +36,7 @@ func CreateReview(client *db.PrismaClient) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(createReview)
 		log.Info().Msg("Review created successfully")
@@ -45,21 +46,21 @@ func CreateReview(client *db.PrismaClient) http.HandlerFunc {
 func GetReviews(client *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		params := mux.Vars(r)
-		id := params["hotelId"]
+		vars := mux.Vars(r)
+		hotelID := vars["hotelId"]
 
-		allReviews, err := client.Review.FindMany(
-			db.Review.Hotel.Link(db.Hotel.ID.Equals(id)),
+		reviews, err := client.Review.FindMany(
+			db.Review.HotelID.Equals(hotelID),
 		).Exec(r.Context())
 		if err != nil {
-			http.Error(w, "Error creating review", http.StatusInternalServerError)
-			log.Error().Err(err).Msg("Failed to create review in database")
+			http.Error(w, "Failed to fetch reviews", http.StatusInternalServerError)
+			log.Error().Err(err).Msg("Failed to fetch reviews from database")
 			return
 		}
 
-		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(allReviews)
-
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(reviews)
+		log.Info().Msg("Reviews fetched successfully")
 	}
 }
 func GetReview(client *db.PrismaClient) http.HandlerFunc {
@@ -74,10 +75,11 @@ func GetReview(client *db.PrismaClient) http.HandlerFunc {
 		).Exec(r.Context())
 		if err != nil {
 			http.Error(w, "Error creating review", http.StatusInternalServerError)
-			log.Error().Err(err).Msg("Failed to create review in database")
+			log.Error().Err(err).Msg("Failed to get review in database")
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(allReviews)
 
@@ -98,6 +100,7 @@ func DeleteReview(client *db.PrismaClient) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(deleteReview)
 		log.Info().Msg("Review Deleted successfully")

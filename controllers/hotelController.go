@@ -42,6 +42,8 @@ func CreateHotel(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to create a hotel in database")
 			return
 		}
+
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(hotel)
 		log.Info().Msg("Hotel Created Successfully !")
@@ -57,6 +59,7 @@ func GetAllHotels(client *db.PrismaClient) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(hotels)
 	}
@@ -77,6 +80,7 @@ func GetHotelById(client *db.PrismaClient) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(hotel)
 	}
@@ -116,6 +120,7 @@ func UpdateHotel(client *db.PrismaClient) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(updatedHotel)
 	}
 }
@@ -134,6 +139,7 @@ func DeleteHotel(client *db.PrismaClient) http.HandlerFunc {
 			return
 		}
 
+		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(delete)
 	}
 }

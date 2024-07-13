@@ -17,7 +17,7 @@ func HotelRoutes(router *mux.Router, client *db.PrismaClient) {
 	router.HandleFunc("/hotels/{id}", controllers.GetHotelById(client)).Methods("GET")
 
 	// Protected Routes
-	secured.HandleFunc("", controllers.CreateHotel(client)).Methods("POST")
-	secured.HandleFunc("/{id}", controllers.UpdateHotel(client)).Methods("PUT")
-	secured.HandleFunc("/{id}", controllers.DeleteHotel(client)).Methods("DELETE")
+	secured.HandleFunc("/create", controllers.CreateHotel(client)).Methods("POST")
+	secured.HandleFunc("/{id}/update", controllers.UpdateHotel(client)).Methods("PUT")
+	secured.HandleFunc("/{id}/delete", controllers.DeleteHotel(client)).Methods("DELETE")
 }

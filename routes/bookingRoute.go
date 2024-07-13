@@ -12,9 +12,9 @@ func BookingRoutes(router *mux.Router, client *db.PrismaClient) {
 	securd := router.PathPrefix("/booking").Subrouter()
 	securd.Use(middleware.AuthMiddleware)
 
-	securd.HandleFunc("/booking/{hotelId}/all", controllers.GetBookings(client)).Methods("GET")
-	securd.HandleFunc("/booking/{id}/", controllers.GetBookingById(client)).Methods("GET")
-	securd.HandleFunc("/booking/{hotelId}/create", controllers.CreateBooking(client)).Methods("POST")
-	securd.HandleFunc("/booking/{id}/update", controllers.UpdateBooking(client)).Methods("PUT")
-	securd.HandleFunc("/booking/{id}/delete", controllers.DeleteBooking(client)).Methods("DELETE")
+	securd.HandleFunc("/{hotelId}/all", controllers.GetBookings(client)).Methods("GET")
+	securd.HandleFunc("/{id}/", controllers.GetBookingById(client)).Methods("GET")
+	securd.HandleFunc("/{hotelId}/create", controllers.CreateBooking(client)).Methods("POST")
+	securd.HandleFunc("/{id}/update", controllers.UpdateBooking(client)).Methods("PUT")
+	securd.HandleFunc("/{id}/delete", controllers.DeleteBooking(client)).Methods("DELETE")
 }

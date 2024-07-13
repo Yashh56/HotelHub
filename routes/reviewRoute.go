@@ -15,6 +15,6 @@ func ReviewRoutes(router *mux.Router, client *db.PrismaClient) {
 	router.HandleFunc("/reviews/{hotelId}/all", controllers.GetReviews(client)).Methods("GET")
 	router.HandleFunc("/reviews/{hotelId}/review/{id}", controllers.GetReview(client)).Methods("GET")
 
-	securd.HandleFunc("/review/{hotelId}/create", controllers.CreateReview(client)).Methods("POST")
-	securd.HandleFunc("/review/{hotelId}/delete", controllers.DeleteReview(client)).Methods("DELETE")
+	securd.HandleFunc("/{hotelId}/create", controllers.CreateReview(client)).Methods("POST")
+	securd.HandleFunc("/{hotelId}/delete", controllers.DeleteReview(client)).Methods("DELETE")
 }
