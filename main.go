@@ -11,6 +11,7 @@ import (
 	"github.com/Yashh56/HotelHub/routes"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -39,9 +40,16 @@ func main() {
 	routes.PaymentRoutes(r, client)
 	routes.ReviewRoutes(r, client)
 
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000", "https://your-frontend-domain.com"}, // Update with your frontend URL
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Authorization", "Content-Type"},
+		AllowCredentials: true,
+	}).Handler(r)
+
 	server := &http.Server{
 		Addr:           ":" + port,
-		Handler:        r,
+		Handler:        corsHandler,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
