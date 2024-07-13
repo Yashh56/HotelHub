@@ -45,6 +45,7 @@ func Register(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to create user in database")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(user)
@@ -104,6 +105,7 @@ func Login(client *db.PrismaClient) http.HandlerFunc {
 			"userId": user.ID,
 			"token":  tokenString,
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(response)

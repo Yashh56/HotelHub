@@ -58,7 +58,7 @@ func CreateBooking(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to create booking in database")
 			return
 		}
-
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(createBooking)
 		log.Info().Msg("Booking has completed")
@@ -80,7 +80,7 @@ func GetBookings(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to Load booking in database")
 			return
 		}
-
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusFound)
 		json.NewEncoder(w).Encode(bookings)
 		log.Info().Msg("All bookings")
@@ -100,7 +100,7 @@ func GetBookingById(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to Load booking in database")
 			return
 		}
-
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusFound)
 		json.NewEncoder(w).Encode(byId)
 		log.Info().Msg("All bookings by id")
@@ -117,10 +117,10 @@ func DeleteBooking(client *db.PrismaClient) http.HandlerFunc {
 
 		if err != nil {
 			http.Error(w, "Error fetching booking", http.StatusInternalServerError)
-			log.Error().Err(err).Msg("Failed to fetch booking from database")
+			log.Error().Err(err).Msg("Failed to delete booking from database")
 			return
 		}
-
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(deleteBooking)
 	}
@@ -171,7 +171,7 @@ func UpdateBooking(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to create booking in database")
 			return
 		}
-
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(update)
 		log.Info().Msg("Booking has completed")

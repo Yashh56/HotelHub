@@ -41,6 +41,7 @@ func CreateCustomer(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to create a customer in database")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(newCustomer)
 		log.Info().Msg("Customer Created Successfully !")
@@ -62,6 +63,7 @@ func GetCustomers(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to get a customers")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(allCustomers)
 	}
@@ -81,6 +83,7 @@ func DeleteCustomer(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to delete a customer in database")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(deleteCustomer)
 		log.Info().Msg("Customer Deleted Successfully !")

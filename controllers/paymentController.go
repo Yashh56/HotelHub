@@ -89,6 +89,7 @@ func PendingPayment(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to retrive pendingful Payments")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(pending)
@@ -110,6 +111,7 @@ func SuccessfulPayment(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to retrive Successful Payments")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(success)

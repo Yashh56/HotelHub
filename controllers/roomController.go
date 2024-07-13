@@ -78,6 +78,7 @@ func CreateRoom(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to create room in database")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(createdRoom)
@@ -97,6 +98,7 @@ func GetRooms(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to create room in database")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(rooms)
@@ -118,6 +120,7 @@ func GetRoomById(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to fetch room from database")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(room)
@@ -138,6 +141,7 @@ func DeleteRoom(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to fetch room from database")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(deleteRoom)
@@ -173,6 +177,7 @@ func UpdateRoom(client *db.PrismaClient) http.HandlerFunc {
 			log.Error().Err(err).Msg("Failed to fetch room from database")
 			return
 		}
+		w.Header().Set("Content-Type", "application/json")
 
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(updateRoom)
