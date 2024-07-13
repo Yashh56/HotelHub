@@ -98,11 +98,7 @@ func PendingPayment(client *db.PrismaClient) http.HandlerFunc {
 func SuccessfulPayment(client *db.PrismaClient) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		params := mux.Vars(r)
-		bookingId := params["bookingId"]
-
 		success, err := client.Payment.FindMany(
-			db.Payment.Booking.Link(db.Booking.ID.Equals(bookingId)),
 			db.Payment.Status.Equals("Success"),
 		).Exec(r.Context())
 

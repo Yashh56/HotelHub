@@ -14,6 +14,6 @@ func PaymentRoutes(router *mux.Router, client *db.PrismaClient) {
 
 	securd.HandleFunc("/{bookingId}/create", controllers.CreatePayment(client)).Methods("POST")
 	securd.HandleFunc("/{id}/delete", controllers.DeletePayment(client)).Methods("POST")
-	securd.HandleFunc("/{bookingId}/success", controllers.SuccessfulPayment(client)).Methods("GET")
+	securd.HandleFunc("/success", controllers.SuccessfulPayment(client)).Methods("GET")
 	securd.HandleFunc("/{bookingId}/pending", controllers.PendingPayment(client)).Methods("GET")
 }
